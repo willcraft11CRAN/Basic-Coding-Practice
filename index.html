@@ -13,7 +13,7 @@ body {
   justify-content: center;
   align-items: center;
   background: linear-gradient(135deg, #d62828, #f77f9c);
-  transition: background 3s ease;
+  transition: background 2s ease;
   font-family: 'Segoe UI', sans-serif;
   text-align: center;
   color: white;
@@ -42,6 +42,8 @@ button {
 #yesBtn {
   background: #ff4d6d;
   color: white;
+  box-shadow: 0 0 10px #ff4d6d, 0 0 20px #ff4d6d;
+  transition: box-shadow 1s ease, transform 0.2s ease;
 }
 
 #noBtn {
@@ -65,7 +67,7 @@ button:hover {
 <body>
 
 <div class="card">
-  <h1>💖 To my dearest Maureen 💖</h1>
+  <h1>💖 My dearest Maureen 💖</h1>
   <p>I have a very important question for you</p>
 
   <h2>Will you be my Valentine?</h2>
@@ -153,6 +155,17 @@ setInterval(() => {
   current = (current + 1) % gradients.length;
   document.body.style.background = gradients[current];
 }, 4000); // change every 4 seconds
+
+  // Glow the Yes button in sync with background change
+setInterval(() => {
+  yesBtn.style.transform = 'scale(1.2)';
+  yesBtn.style.boxShadow = '0 0 20px #ff4d6d, 0 0 40px #ff4d6d';
+  setTimeout(() => {
+    yesBtn.style.transform = 'scale(1)';
+    yesBtn.style.boxShadow = '0 0 10px #ff4d6d, 0 0 20px #ff4d6d';
+  }, 2000);
+}, 4000);
+
 
 </script>
 

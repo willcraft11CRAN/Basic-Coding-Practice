@@ -21,8 +21,7 @@ body {
 }
 
 .card {
-  position: relative; /* for absolute positioning */
-  overflow: hidden;   /* keeps No button inside */
+  position: relative; /* important for absolute positioning inside */
   background: rgba(0,0,0,0.25);
   padding: 2.5rem;
   border-radius: 20px;
@@ -33,9 +32,9 @@ body {
 .buttons {
   display: flex;
   justify-content: center;
-  gap: 20px;
+  gap: 20px; /* space between buttons */
   margin-top: 20px;
-  position: relative; /* Yes button flex works */
+  position: relative; /* keeps Yes button in flex layout, No will be absolute */
 }
 
 #yesBtn {
@@ -52,18 +51,18 @@ body {
 }
 
 #noBtn {
-  position: absolute; /* absolute inside card */
-  left: 50%;
-  top: 50%;
-  transform: translate(-50%, -50%) scale(1);
-  z-index: 1;
-  cursor: pointer;
   background: white;
   color: #ff4d6d;
   border: none;
   padding: 12px 26px;
-  border-radius: 999px;
   font-size: 1rem;
+  border-radius: 999px;
+  cursor: pointer;
+  position: absolute; /* allows teleport inside card */
+  left: 50%;
+  top: 50%;
+  transform: translate(-50%, -50%) scale(1);
+  z-index: 1;
 }
 
 #message {
@@ -82,11 +81,8 @@ body {
 
   <div class="buttons">
     <button id="yesBtn">Yes 💘</button>
-    <!-- No button removed from flex -->
+    <button id="noBtn">No</button>
   </div>
-
-  <!-- No button now directly inside card -->
-  <button id="noBtn">No</button>
 
   <div id="message"></div>
 </div>
@@ -96,7 +92,7 @@ const yesBtn = document.getElementById("yesBtn");
 const noBtn = document.getElementById("noBtn");
 const message = document.getElementById("message");
 
-// Teasing messages
+// Teasing messages for No
 const messages = [
   "Hmm… that doesn’t seem right 🤔",
   "Strange choice…",
@@ -108,17 +104,20 @@ const messages = [
 let noScale = 1;
 let noCount = 0;
 
-// Teleport and shrink No button
+// Function to teleport and shrink No button
 function teleportNo() {
   const card = document.querySelector('.card');
   const cardRect = card.getBoundingClientRect();
 
+  // safe area inside card
   const maxX = cardRect.width - noBtn.offsetWidth;
   const maxY = cardRect.height - noBtn.offsetHeight;
 
+  // random position
   const x = Math.random() * maxX;
   const y = Math.random() * maxY;
 
+  // shrink a bit
   noScale *= 0.9;
   if (noScale < 0.3) noScale = 0.3;
 
@@ -126,6 +125,7 @@ function teleportNo() {
   noBtn.style.top = `${y}px`;
   noBtn.style.transform = `scale(${noScale})`;
 
+  // teasing messages
   if (noCount < messages.length) {
     message.textContent = messages[noCount];
     noCount++;
@@ -134,11 +134,11 @@ function teleportNo() {
   }
 }
 
-// Hover or click triggers teleport
+// trigger on hover or click
 noBtn.addEventListener("mouseover", teleportNo);
 noBtn.addEventListener("click", teleportNo);
 
-// Yes button click
+// When Yes is clicked
 yesBtn.addEventListener("click", () => {
   document.body.innerHTML = `
     <div style="
@@ -175,6 +175,16 @@ setInterval(() => {
   document.body.style.background = gradients[current];
 }, 4000);
 
-// Glow/pulse Yes button
+// Glow/pulse Yes button in sync
 setInterval(() => {
-  y
+  yesBtn.style.transform = 'scale(1.2)';
+  yesBtn.style.boxShadow = '0 0 20px #ff4d6d, 0 0 40px #ff4d6d';
+  setTimeout(() => {
+    yesBtn.style.transform = 'scale(1)';
+    yesBtn.style.boxShadow = '0 0 10px #ff4d6d, 0 0 20px #ff4d6d';
+  }, 2000);
+}, 4000);
+</script>
+
+</body>
+</html>

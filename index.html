@@ -22,6 +22,7 @@ body {
 }
 
 .card {
+  position: relative;  /* add this */
   background: rgba(0,0,0,0.25);
   padding: 2.5rem;
   border-radius: 20px;
@@ -29,14 +30,23 @@ body {
   box-shadow: 0 20px 40px rgba(0,0,0,0.25);
 }
 
-button {
-  border: none;
-  padding: 12px 26px;
-  font-size: 1rem;
-  border-radius: 999px;
-  cursor: pointer;
-  margin: 8px;
-  transition: transform 0.2s ease;
+
+.buttons {
+  position: relative;
+  width: 100%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 80px; /* keeps space for the moving No button */
+}
+
+#noBtn {
+  background: white;
+  color: #ff4d6d;
+  position: absolute; /* allows it to move around */
+  top: 0;
+  left: 50%;
+  transform: translate(-50%, 0) scale(1); /* start centered */
 }
 
 #yesBtn {
@@ -46,11 +56,6 @@ button {
   transition: box-shadow 1s ease, transform 0.2s ease;
 }
 
-#noBtn {
-  background: white;
-  color: #ff4d6d;
-  position: absolute;
-}
 
 button:hover {
   transform: scale(1.1);
@@ -72,10 +77,10 @@ button:hover {
 
   <h2>Will you be my Valentine?</h2>
 
-  <div>
-    <button id="yesBtn">Yes 💘</button>
-    <button id="noBtn">No 💔</button>
-  </div>
+<div class="buttons">
+  <button id="yesBtn">Yes 💘</button>
+  <button id="noBtn">No</button>
+</div>
 
   <div id="message"></div>
 </div>
@@ -98,9 +103,18 @@ const messages = [
 ];
 
 function moveAndShrink() {
-  const x = Math.random() * (window.innerWidth - 100);
-  const y = Math.random() * (window.innerHeight - 50);
+  const card = document.querySelector('.card');
+  const cardRect = card.getBoundingClientRect();
 
+  // button dimensions
+  const btnWidth = noBtn.offsetWidth;
+  const btnHeight = noBtn.offsetHeight;
+
+  // safe range inside the card
+  const x = Math.random() * (cardRect.width - btnWidth);
+  const y = Math.random() * (cardRect.height - btnHeight - 50); // leave space at top for text
+
+  // shrink button
   scale *= 0.8;
   if (scale < 0.2) scale = 0.2;
 
@@ -111,7 +125,7 @@ function moveAndShrink() {
   if (noCount < messages.length) {
     message.textContent = messages[noCount];
   } else {
-    message.textContent = "The button has accepted its fate, good luck";
+    message.textContent = "The button has accepted its fate.";
   }
 
   noCount++;

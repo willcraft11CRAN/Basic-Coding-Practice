@@ -118,12 +118,14 @@ function orbitAndShrink() {
   scale *= 0.8;
   if (scale < 0.2) scale = 0.2;
 
-  // calculate Yes button center dynamically
-  const yesRect = yesBtn.getBoundingClientRect();
-  const centerX = yesRect.left + yesRect.width/2;
-  const centerY = yesRect.top + yesRect.height/2;
+  const card = document.querySelector('.card');
+  const cardRect = card.getBoundingClientRect();
 
-  angle += Math.random() * 60 + 30; // random step to make orbit chaotic
+  // center relative to the card
+  const centerX = cardRect.width / 2;
+  const centerY = cardRect.height / 2;
+
+  angle += Math.random() * 60 + 30; // random step
   const rad = angle * Math.PI / 180;
 
   const x = centerX + radius * Math.cos(rad) - noBtn.offsetWidth / 2;
@@ -141,6 +143,7 @@ function orbitAndShrink() {
 
   noCount++;
 }
+
 
 // Event listeners for No button
 noBtn.addEventListener("mouseover", orbitAndShrink);

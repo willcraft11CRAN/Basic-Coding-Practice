@@ -135,6 +135,8 @@ yesBtn.addEventListener("click", () => {
       background:linear-gradient(135deg,#ff4d6d,#ff9a9e);
       color:white;
       text-align:center;
+      padding: 2rem;   /* ← add this */
+      box-sizing: border-box;  /* ← ensures padding is included in size */
     ">
       <h1>🎉 Yayyyy !! 🎉</h1>
       <h2> You are officially my Valentine ! </h2>
@@ -146,6 +148,7 @@ yesBtn.addEventListener("click", () => {
     </div>
   `;
 });
+
 
 // Background gradient rotation
 const gradients = [

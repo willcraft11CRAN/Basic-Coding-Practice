@@ -77,7 +77,7 @@ body {
 <body>
 
 <div class="card">
-  <h1>💖 My dearest Maureen 💖</h1>
+  <h1>💖 Dear Maureen 💖</h1>
   <p>I have a very important question for you</p>
 
   <h2>Will you be my Valentine?</h2>
@@ -117,6 +117,11 @@ const centerY = yesBtn.offsetTop + yesBtn.offsetHeight/2;
 function orbitAndShrink() {
   scale *= 0.8;
   if (scale < 0.2) scale = 0.2;
+
+  // calculate Yes button center dynamically
+  const yesRect = yesBtn.getBoundingClientRect();
+  const centerX = yesRect.left + yesRect.width/2;
+  const centerY = yesRect.top + yesRect.height/2;
 
   angle += Math.random() * 60 + 30; // random step to make orbit chaotic
   const rad = angle * Math.PI / 180;

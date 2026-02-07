@@ -92,36 +92,42 @@ const messages = [
   "I thought you love me 💔",
   "You're making me sad! 😢"
 ];
+let noScale = 1;
 let noCount = 0;
 
-// When No is clicked
-let noScale = 1; // starting scale for No button
+function teleportNo() {
+  const card = document.querySelector('.card');
+  const cardRect = card.getBoundingClientRect();
 
-noBtn.addEventListener("mouseover", () => {
-  noScale *= 0.8;           // shrink by 20% each hover
-  if (noScale < 0.01) noScale = 0.01; // minimum size
+  // safe area inside the card
+  const maxX = cardRect.width - noBtn.offsetWidth;
+  const maxY = cardRect.height - noBtn.offsetHeight;
+
+  // random position
+  const x = Math.random() * maxX;
+  const y = Math.random() * maxY;
+
+  // shrink a bit
+  noScale *= 0.9;
+  if (noScale < 0.3) noScale = 0.3;
+
+  noBtn.style.left = `${x}px`;
+  noBtn.style.top = `${y}px`;
   noBtn.style.transform = `scale(${noScale})`;
 
+  // teasing messages
   if (noCount < messages.length) {
     message.textContent = messages[noCount];
     noCount++;
   } else {
-    message.textContent = "Wellllll....💔";
+    message.textContent = "Welll.....💔";
   }
-});
+}
 
-noBtn.addEventListener("click", () => {
-  // also shrink on click
-  noScale *= 0.8;
-  if (noScale < 0.01) noScale = 0.01;
-  noBtn.style.transform = `scale(${noScale})`;
+// trigger on hover or click
+noBtn.addEventListener("mouseover", teleportNo);
+noBtn.addEventListener("click", teleportNo);
 
-  if (noCount < messages.length) {
-    message.textContent = messages[noCount];
-    noCount++;
-  } else {
-    message.textContent = "Wellllll....💔";
-  }
 });
 
 

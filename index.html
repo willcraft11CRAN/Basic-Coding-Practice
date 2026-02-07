@@ -39,21 +39,19 @@ body {
   align-items: center;
   height: 80px; /* keeps space for the moving No button */
 }
-
+#yesBtn {
+  background: #ff4d6d;
+  color: white;
+  top: 0;
+  box-shadow: 0 0 10px #ff4d6d, 0 0 20px #ff4d6d;
+  transition: box-shadow 1s ease, transform 0.2s ease;
+}
 #noBtn {
   background: white;
   color: #ff4d6d;
   position: absolute; /* allows it to move around */
-  top: 0;
   left: 50%;
   transform: translate(-50%, 0) scale(1); /* start centered */
-}
-
-#yesBtn {
-  background: #ff4d6d;
-  color: white;
-  box-shadow: 0 0 10px #ff4d6d, 0 0 20px #ff4d6d;
-  transition: box-shadow 1s ease, transform 0.2s ease;
 }
 
 

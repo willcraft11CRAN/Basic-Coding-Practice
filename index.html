@@ -95,7 +95,13 @@ const messages = [
 let noCount = 0;
 
 // When No is clicked
-noBtn.addEventListener("click", () => {
+let noScale = 1; // starting scale for No button
+
+noBtn.addEventListener("mouseover", () => {
+  noScale *= 0.8;           // shrink by 20% each hover
+  if (noScale < 0.3) noScale = 0.3; // minimum size
+  noBtn.style.transform = `scale(${noScale})`;
+
   if (noCount < messages.length) {
     message.textContent = messages[noCount];
     noCount++;
@@ -103,6 +109,21 @@ noBtn.addEventListener("click", () => {
     message.textContent = "You know the answer 😉";
   }
 });
+
+noBtn.addEventListener("click", () => {
+  // also shrink on click
+  noScale *= 0.8;
+  if (noScale < 0.3) noScale = 0.3;
+  noBtn.style.transform = `scale(${noScale})`;
+
+  if (noCount < messages.length) {
+    message.textContent = messages[noCount];
+    noCount++;
+  } else {
+    message.textContent = "You know the answer 😉";
+  }
+});
+
 
 // When Yes is clicked
 yesBtn.addEventListener("click", () => {

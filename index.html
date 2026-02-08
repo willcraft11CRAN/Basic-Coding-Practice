@@ -60,8 +60,9 @@ body {
   font-size: 1rem;
   border-radius: 999px;
   cursor: pointer;
+  position: absolute; /* for teleporting */
   z-index: 1;
-  transition: transform 0.2s ease;
+  transition: transform 0.2s ease, top 0.2s ease, left 0.2s ease;
 }
 
 #message {
@@ -73,7 +74,7 @@ body {
 </head>
 <body>
 
-<div class="card">
+<div class="card" id="card">
   <h1>💖 Dear Maureen 💖</h1>
   <p>I have a very important question for you</p>
   <h2>Will you be my Valentine?</h2>
@@ -90,6 +91,7 @@ body {
 const yesBtn = document.getElementById("yesBtn");
 const noBtn = document.getElementById("noBtn");
 const message = document.getElementById("message");
+const card = document.getElementById("card");
 
 // Teasing messages
 const messages = [
@@ -103,15 +105,22 @@ const messages = [
   "Aren't you curious?"
 ];
 
-let noScale = 1;
 let noCount = 0;
 
-// Shrink No button and show teasing messages
-function shrinkNo() {
-  noScale *= 0.9;
-  if (noScale < 0.3) noScale = 0.3;
+// Teleport No button randomly
+function teleportNo() {
+  const cardRect = card.getBoundingClientRect();
+  const btnRect = noBtn.getBoundingClientRect();
 
-  noBtn.style.transform = `scale(${noScale})`;
+  // calculate max top/left so button stays inside card
+  const maxTop = card.clientHeight - btnRect.height;
+  const maxLeft = card.clientWidth - btnRect.width;
+
+  const randomTop = Math.random() * maxTop;
+  const randomLeft = Math.random() * maxLeft;
+
+  noBtn.style.top = randomTop + "px";
+  noBtn.style.left = randomLeft + "px";
 
   if (noCount < messages.length) {
     message.textContent = messages[noCount];
@@ -121,9 +130,9 @@ function shrinkNo() {
   }
 }
 
-// Trigger on hover or click
-noBtn.addEventListener("mouseover", shrinkNo);
-noBtn.addEventListener("click", shrinkNo);
+// Trigger teleport on hover or click
+noBtn.addEventListener("mouseover", teleportNo);
+noBtn.addEventListener("click", teleportNo);
 
 // Yes button click
 yesBtn.addEventListener("click", () => {
@@ -138,8 +147,10 @@ yesBtn.addEventListener("click", () => {
       background:linear-gradient(135deg,#ff4d6d,#ff9a9e);
       color:white;
       text-align:center;
-      padding: 2rem;   /* ← add this */
-      box-sizing: border-box;  /* ← ensures padding is included in size */
+      padding: 2rem;
+      box-sizing: border-box;
+      max-width: 600px;
+      margin: 0 auto;
     ">
       <h1>🎉 Yayyyy !! 🎉</h1>
       <h2> You are officially my Valentine ! </h2>
@@ -151,7 +162,6 @@ yesBtn.addEventListener("click", () => {
     </div>
   `;
 });
-
 
 // Background gradient rotation
 const gradients = [

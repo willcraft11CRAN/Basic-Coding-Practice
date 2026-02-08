@@ -199,14 +199,17 @@ yesBtn.addEventListener("click", () => {
 
 // Background gradient rotation
 const gradients = [
-  'linear-gradient(135deg, #d62828, #f77f9c)',
-  'linear-gradient(135deg, #b11226, #ff4d6d)',
-  'linear-gradient(135deg, #c9184a, #ff758f)'
+  'linear-gradient(135deg, rgba(214,40,40,0.5), rgba(247,127,156,0.5))',
+  'linear-gradient(135deg, rgba(177,18,38,0.5), rgba(255,77,109,0.5))',
+  'linear-gradient(135deg, rgba(201,24,74,0.5), rgba(255,117,143,0.5))'
 ];
 let current = 0;
+const body = document.body;
+
 setInterval(() => {
   current = (current + 1) % gradients.length;
-  document.body.style.background = gradients[current];
+  body.style.background = `${gradients[current]}, url('Background_1.jpg') no-repeat center center`;
+  body.style.backgroundSize = 'cover';
 }, 4000);
 
 // Glow/pulse Yes button

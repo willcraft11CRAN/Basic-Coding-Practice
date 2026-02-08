@@ -37,7 +37,7 @@ body {
   gap: 20px;
   margin-top: 20px;
   position: relative;
-  height: 50px; /* space for No button to bounce */
+  height: 50px;
 }
 
 #yesBtn {
@@ -62,8 +62,7 @@ body {
   border-radius: 999px;
   cursor: pointer;
   z-index: 1;
-  transition: top 0.3s ease, left 0.3s ease, transform 0.2s ease;
-  /* initially in flex, no absolute */
+  transition: top 0.1s ease, left 0.1s ease, transform 0.1s ease;
 }
 
 #message {
@@ -95,7 +94,7 @@ const message = document.getElementById("message");
 
 const messages = [
   "Hmm… that doesn’t seem right 🤔",
-  "Strange choice…",
+  "This isn't you",
   "Are you sure about that?",
   "I thought you love me 💔",
   "You're making me sad! 😢",
@@ -107,48 +106,68 @@ const messages = [
 let noCount = 0;
 let isNoAbsolute = false;
 
-function bounceNo() {
-  const container = noBtn.parentElement;
-
-  // First time: switch to absolute without breaking alignment
+// Set No button absolute at initial location
+function ensureAbsolute() {
   if (!isNoAbsolute) {
-    const btnRect = noBtn.getBoundingClientRect();
-    const containerRect = container.getBoundingClientRect();
-    const top = btnRect.top - containerRect.top;
-    const left = btnRect.left - containerRect.left;
-
+    const rect = noBtn.getBoundingClientRect();
+    const parentRect = noBtn.parentElement.getBoundingClientRect();
     noBtn.style.position = 'absolute';
-    noBtn.style.top = top + 'px';
-    noBtn.style.left = left + 'px';
-
+    noBtn.style.top = (rect.top - parentRect.top) + 'px';
+    noBtn.style.left = (rect.left - parentRect.left) + 'px';
     isNoAbsolute = true;
-  }
-
-  // container width/height for boundary
-  const maxTop = container.clientHeight - noBtn.offsetHeight;
-  const maxLeft = container.clientWidth - noBtn.offsetWidth;
-
-  const randomTop = Math.random() * maxTop;
-  const randomLeft = Math.random() * maxLeft;
-
-  // quick bounce scale
-  noBtn.style.transform = 'scale(1.2)';
-  setTimeout(() => { noBtn.style.transform = 'scale(1)'; }, 150);
-
-  noBtn.style.top = randomTop + 'px';
-  noBtn.style.left = randomLeft + 'px';
-
-  if (noCount < messages.length) {
-    message.textContent = messages[noCount];
-    noCount++;
-  } else {
-    message.textContent = "Hooo not so easy hehehe";
   }
 }
 
-noBtn.addEventListener("mouseover", bounceNo);
-noBtn.addEventListener("click", bounceNo);
+// Function to move No button away from cursor
+function chaseCursor(e) {
+  ensureAbsolute();
+  const container = noBtn.parentElement;
 
+  const btnRect = noBtn.getBoundingClientRect();
+  const parentRect = container.getBoundingClientRect();
+
+  const btnCenterX = btnRect.left + btnRect.width / 2;
+  const btnCenterY = btnRect.top + btnRect.height / 2;
+
+  const mouseX = e.clientX;
+  const mouseY = e.clientY;
+
+  const dx = btnCenterX - mouseX;
+  const dy = btnCenterY - mouseY;
+
+  const distance = Math.sqrt(dx*dx + dy*dy);
+
+  if (distance < 100) { // only move if mouse is close
+    let moveX = dx / distance * 80; // scale movement
+    let moveY = dy / distance * 80;
+
+    let newTop = btnRect.top - parentRect.top + moveY;
+    let newLeft = btnRect.left - parentRect.left + moveX;
+
+    // Clamp inside container
+    newTop = Math.max(0, Math.min(container.clientHeight - btnRect.height, newTop));
+    newLeft = Math.max(0, Math.min(container.clientWidth - btnRect.width, newLeft));
+
+    noBtn.style.top = newTop + 'px';
+    noBtn.style.left = newLeft + 'px';
+
+    // quick bounce
+    noBtn.style.transform = 'scale(1.2)';
+    setTimeout(() => { noBtn.style.transform = 'scale(1)'; }, 100);
+
+    // Show teasing message
+    if (noCount < messages.length) {
+      message.textContent = messages[noCount];
+      noCount++;
+    } else {
+      message.textContent = "I won't give up that easy ehehe";
+    }
+  }
+}
+
+document.addEventListener("mousemove", chaseCursor);
+
+// Yes button click
 yesBtn.addEventListener("click", () => {
   document.body.innerHTML = `
     <div style="

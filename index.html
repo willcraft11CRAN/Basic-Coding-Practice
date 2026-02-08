@@ -140,7 +140,7 @@ function chaseCursor(e) {
 
   if (distance < 200) { // only move if mouse is close
     let moveX = dx / distance * 95; // scale movement
-    let moveY = dy / distance * 95;
+    let moveY = dy / distance * 150;
 
     let newTop = btnRect.top - parentRect.top + moveY;
     let newLeft = btnRect.left - parentRect.left + moveX;
